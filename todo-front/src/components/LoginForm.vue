@@ -40,6 +40,8 @@
 
 <script>
 import axios from 'axios'
+import router from '@/router'
+
 export default {
   name: "LoginForm",
   data() {
@@ -56,14 +58,29 @@ export default {
     login() {
       if(this.checkForm()) { // 함수가 유효한지 아닌지를 확인해서 true or false 반환
         this.loading = true
+
+        // http://127.0.0.1:8000
         const SERVER_IP = process.env.VUE_APP_SERVER_IP
         // axios.get('http://127.0.0.1:8000/', this.credentials)
         // SERVER IP 를 한 번만 바꿔주면 다른 곳에서도 적용
-        axios.get(SERVER_IP, this.credentials) 
+
+
+        axios.post(SERVER_IP + '/api-token-auth/', this.credentials) 
         // this.credentials 를 담아서 해당 서버로 보낸다.
         .then(response => {
-          console.log(response)
+
+          // 세션을 초기화, 사용하겠다.
+          this.$session.start()
+
+          // 응답결과를 세션에 저장하겠다.
+          // this.$session.set(key, value)
+          this.$session.set('jwt', response.data.token)
+
+          // console.log(response)
           this.loading = false
+
+          // vue router 를 통해 특정 페이지로 이동
+          router.push('/')
         })
         .catch(error => {
           console.error(error)
