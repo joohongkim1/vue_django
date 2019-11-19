@@ -48,7 +48,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+# https://jpadilla.github.io/django-rest-framework-jwt/usage
 REST_FRAMEWORK = {
+    # 로그인여부 확인 클래스
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
@@ -61,6 +63,7 @@ REST_FRAMEWORK = {
     ),
 }
 
+# https://jpadilla.github.io/django-rest-framework-jwt/additional-settings
 JWT_AUTH = {
     # Token 을 서명할 시크릿 키를 등록 (절대 외부 노출 금지),
     # default 가 settings.SECRET_KEY
@@ -73,7 +76,10 @@ JWT_AUTH = {
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28)
 }
 
+
+# https://github.com/adamchainz/django-cors-headers#cors_origin_whitelist
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -81,6 +87,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+CORS_ORIGIN_WHITELIST = [
+    "https://example.com",
+    "https://sub.example.com",
+    "http://localhost:8080",
+    "http://127.0.0.1:9000"
 ]
 
 ROOT_URLCONF = 'todoback.urls'
@@ -152,3 +165,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+AUTH_USER_MODEL = 'todos.User'
