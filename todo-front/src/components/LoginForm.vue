@@ -68,17 +68,17 @@ export default {
         axios.post(SERVER_IP + '/api-token-auth/', this.credentials) 
         // this.credentials 를 담아서 해당 서버로 보낸다.
         .then(response => {
-
           // 세션을 초기화, 사용하겠다.
           this.$session.start()
-
           // 응답결과를 세션에 저장하겠다.
           // this.$session.set(key, value)
           this.$session.set('jwt', response.data.token)
 
+          // vuex store 를 등록해서 this.$store 로 접근 가능
+          // dispatch('login) => login 이라는 action 을 실행
+          this.$store.dispatch('login', response.data.token)
           // console.log(response)
           this.loading = false
-
           // vue router 를 통해 특정 페이지로 이동
           router.push('/')
         })
